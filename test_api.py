@@ -9,7 +9,7 @@ def test_api():
     # Test single URL check
     print("Testing single URL check...")
     test_urls = [
-        "https://google.com",  # Not phishing
+        "https://www.amazon.co.uk/ap/signin?clientContext=260-5863580-6761515&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.co.uk%2Fgp%2Fvideo%2Fauth%2Freturn%2Fref%3Dav_auth_ap%3F_t%3D1sg2NyuqEtZZ_rvx3xtCnoqDskXFQwcj9Df6lP8l0B1KRHAAAAAQAAAABoJrMmcmF3AAAAAPgWC9WfHH8iB-olH_E9xQ%26location%3D%2Fgp%2Fvideo%2Fontv%2Fcode%3Fref_%253Datv_auth_red_aft&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&accountStatusPolicy=P1&openid.assoc_handle=gbflex&openid.mode=checkid_setup&countryCode=GB&language=en_GB&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0",  # Not phishing
         "http://pub-f7076e6b96664daf90ae8357ef8b9110.r2.dev/DF1.html",  # Likely phishing
     ]
     
