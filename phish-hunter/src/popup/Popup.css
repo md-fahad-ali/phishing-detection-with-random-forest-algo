@@ -1,0 +1,178 @@
+@media (prefers-color-scheme: light) {
+  a:hover {
+    color: #61dafb;
+  }
+}
+
+main {
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto;
+}
+
+h3 {
+  color: #61dafb;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: 200;
+  line-height: 1.2rem;
+  margin: 2rem auto;
+}
+
+.calc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+
+  & > button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #61dafb;
+    border-radius: 0.25rem;
+    background-color: transparent;
+    color: #61dafb;
+    cursor: pointer;
+    outline: none;
+
+    width: 3rem;
+    margin: 0 a;
+  }
+
+  & > label {
+    font-size: 1.5rem;
+    margin: 0 1rem;
+  }
+}
+
+a {
+  font-size: 0.5rem;
+  margin: 0.5rem;
+  color: #cccccc;
+  text-decoration: none;
+}
+
+.phishing-popup {
+  text-align: left;
+  padding: 1.5rem;
+  width: 350px;
+  background: #fff;
+  color: #333;
+}
+
+.phishing-popup h3 {
+  color: #1a73e8;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.url-display {
+  background: #f5f5f5;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  word-break: break-all;
+}
+
+.url-display .label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #666;
+}
+
+.url-display .url {
+  color: #1a73e8;
+}
+
+.score-container {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.score-label {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.slider-container {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.risk-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, #4CAF50, #FF9800, #F44336);
+  outline: none;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.risk-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border: 2px solid #1a73e8;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.score-value {
+  position: absolute;
+  right: 0;
+  top: -1.5rem;
+  font-weight: 600;
+}
+
+.details {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.details h4 {
+  margin: 0 0 0.75rem 0;
+  color: #1a73e8;
+}
+
+.details ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.details li {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.details li:last-child {
+  margin-bottom: 0;
+}
+
+.prediction-label {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+}
