@@ -53,7 +53,7 @@ def normalize_url(url):
     if parsed_url.query:
         normalized_url += f"?{parsed_url.query}"
     if parsed_url.fragment:
-        normalized_url += f"
+        normalized_url += f"#{parsed_url.fragment}"
     
     return normalized_url
 

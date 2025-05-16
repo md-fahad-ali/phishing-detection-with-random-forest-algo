@@ -24,12 +24,26 @@ class PhishingDetector:
         
         parsed_url = urlparse(url)
         
-        
+        # Original length features - keeping them but adding improved versions
         features['url_length'] = len(url)
         features['domain_length'] = len(parsed_url.netloc)
         features['path_length'] = len(parsed_url.path)
         
+        # Normalized length features
+        features['url_length_normalized'] = len(url) / 100  # Normalize to reduce impact of extreme values
+        features['domain_length_normalized'] = len(parsed_url.netloc) / 50
+        features['path_length_normalized'] = len(parsed_url.path) / 50
         
+        # Ratio features
+        features['path_to_url_ratio'] = len(parsed_url.path) / len(url) if len(url) > 0 else 0
+        features['domain_to_url_ratio'] = len(parsed_url.netloc) / len(url) if len(url) > 0 else 0
+        
+        # Threshold features for extreme values
+        features['extremely_long_url'] = 1 if len(url) > 200 else 0
+        features['extremely_long_domain'] = 1 if len(parsed_url.netloc) > 50 else 0
+        features['extremely_long_path'] = 1 if len(parsed_url.path) > 100 else 0
+        
+        # Original features continue below
         features['subdomain_count'] = len(parsed_url.netloc.split('.')) - 1
         
         
@@ -104,9 +118,19 @@ class PhishingDetector:
         X_combined = pd.concat([X_features, X_text_df], axis=1)
         self.feature_columns = X_combined.columns
         
-        
+        # Train model and also print feature importances
         self.model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
         self.model.fit(X_combined, labels)
+        
+        # Print top 20 most important features
+        print("\nTop 20 most important features:")
+        importances = pd.DataFrame({
+            'feature': X_combined.columns,
+            'importance': self.model.feature_importances_
+        })
+        importances = importances.sort_values('importance', ascending=False).head(20)
+        for i, row in importances.iterrows():
+            print(f"{row['feature']}: {row['importance']:.4f}")
         
         return self
 
@@ -159,7 +183,7 @@ def main():
     y = (df['label'] == 'phishing').astype(int)
     
     
-    X_train, X_test, y_train, y_test = train_test_split(df['url'], y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(df['url'], y, test_size=0.2, random_state=42, stratify=y)
     
     
     print("\nTraining model...")
@@ -198,7 +222,8 @@ def main():
         "https://google.com",
         "http://amaz0n-secure-login.com",
         "https://facebook.com",
-        "http://paypal-account-verify-secure.us"
+        "http://paypal-account-verify-secure.us",
+        "https://www.amazon.com/gp/product/B07X8M3JKS/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1"  # Long legitimate URL
     ]
     
     predictions, probabilities = detector.predict(test_urls)
