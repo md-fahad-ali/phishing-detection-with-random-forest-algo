@@ -13,29 +13,25 @@ from flask_cors import CORS  # Add this import
 # Suppress warnings
 warnings.filterwarnings('ignore')
 
-# Import the feature extraction functions from phishing_detection.py
-from phishing_detection import extract_url_features, calculate_entropy
+# Import the PhishingDetector class
+from phishing_detection import PhishingDetector
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# Load the model and vectorizer
+# Load the model
 @app.before_request
-def load_model_and_vectorizer():
-    global model, vectorizer, X_columns
+def load_model():
+    global detector
     
-    # Check if model files exist, if not, train the model
-    if not os.path.exists('phishing_model.pkl'):
+    # Check if model file exists, if not, train the model
+    if not os.path.exists('phishing_detector.pkl'):
         print("Model not found. Please run phishing_detection.py first to train the model.")
         return jsonify({'error': 'Model not found. Please run phishing_detection.py first.'}), 500
     
     # Load only if not already loaded
-    if not globals().get('model'):
-        model = joblib.load('phishing_model.pkl')
-        with open('tfidf_vectorizer.pkl', 'rb') as f:
-            vectorizer = pickle.load(f)
-        with open('X_columns.pkl', 'rb') as f:
-            X_columns = pickle.load(f)
+    if not globals().get('detector'):
+        detector = PhishingDetector.load('phishing_detector.pkl')
 
 # Function to normalize URL for consistent predictions
 def normalize_url(url):
@@ -66,30 +62,8 @@ def predict_phishing(urls):
     # First normalize all URLs
     normalized_urls = [normalize_url(url) for url in urls]
     
-    # Extract features
-    features_list = []
-    for url in normalized_urls:
-        features_list.append(extract_url_features(url))
-    features = pd.DataFrame(features_list)
-    
-    # Extract text features
-    text_features = vectorizer.transform(normalized_urls)
-    text_feature_names = [f'tfidf_{i}' for i in range(text_features.shape[1])]
-    text_features_df = pd.DataFrame(text_features.toarray(), columns=text_feature_names)
-    
-    # Combine features
-    X = pd.concat([features, text_features_df], axis=1)
-    
-    # Adjust columns to match training data
-    for col in X_columns:
-        if col not in X.columns:
-            X[col] = 0
-    
-    X = X[X_columns]  # Ensure same column order
-    
-    # Make predictions
-    predictions = model.predict(X)
-    probabilities = model.predict_proba(X)[:, 1]
+    # Make predictions using the detector
+    predictions, probabilities = detector.predict(normalized_urls)
     
     return predictions, probabilities, normalized_urls
 
