@@ -8,61 +8,61 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
 import os
 import warnings
-from flask_cors import CORS  # Add this import
+from flask_cors import CORS  
 
-# Suppress warnings
+
 warnings.filterwarnings('ignore')
 
-# Import the PhishingDetector class
+
 from phishing_detection import PhishingDetector
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  
 
-# Load the model
+
 @app.before_request
 def load_model():
     global detector
     
-    # Check if model file exists, if not, train the model
+    
     if not os.path.exists('phishing_detector.pkl'):
         print("Model not found. Please run phishing_detection.py first to train the model.")
         return jsonify({'error': 'Model not found. Please run phishing_detection.py first.'}), 500
     
-    # Load only if not already loaded
+    
     if not globals().get('detector'):
         detector = PhishingDetector.load('phishing_detector.pkl')
 
-# Function to normalize URL for consistent predictions
+
 def normalize_url(url):
     parsed_url = urlparse(url)
     domain = parsed_url.netloc.lower()
     
-    # Remove port if present
+    
     if ':' in domain:
         domain = domain.split(':')[0]
     
-    # Remove www. prefix for consistency
+    
     if domain.startswith('www.'):
         domain = domain[4:]
     
-    # Rebuild the URL with normalized domain
+    
     normalized_url = f"{parsed_url.scheme}://{domain}{parsed_url.path}"
     if parsed_url.params:
         normalized_url += f";{parsed_url.params}"
     if parsed_url.query:
         normalized_url += f"?{parsed_url.query}"
     if parsed_url.fragment:
-        normalized_url += f"#{parsed_url.fragment}"
+        normalized_url += f"
     
     return normalized_url
 
-# Function to make predictions on new URLs
+
 def predict_phishing(urls):
-    # First normalize all URLs
+    
     normalized_urls = [normalize_url(url) for url in urls]
     
-    # Make predictions using the detector
+    
     predictions, probabilities = detector.predict(normalized_urls)
     
     return predictions, probabilities, normalized_urls
@@ -76,7 +76,7 @@ def check_url():
     
     url = data['url']
     
-    # Make prediction using normalized URL for consistency
+    
     try:
         predictions, probabilities, normalized_urls = predict_phishing([url])
         is_phishing = bool(predictions[0])
@@ -129,8 +129,8 @@ def index():
             <title>Phishing URL Detection API</title>
             <style>
                 body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-                h1 { color: #333; }
-                pre { background-color: #f5f5f5; padding: 10px; border-radius: 5px; }
+                h1 { color: 
+                pre { background-color: 
                 .endpoint { margin-bottom: 20px; }
             </style>
         </head>
@@ -198,6 +198,6 @@ def index():
     """
 
 if __name__ == '__main__':
-    # Only run in debug mode when developing locally
+    
     debug_mode = os.environ.get('FLASK_ENV') == 'development'
     app.run(debug=debug_mode)
